@@ -65,14 +65,16 @@ Date(yyyy-mm-dd)     Author        Modification
 *******************************************************************************/
 bool isMatch(char* s, char* p) 
 {
-    
+    return true;
 }
 
 int main()
 {
-	int d = 10;
+	int d;
+    char s[] = "aab";
+    char p[] = "bbb";
 
-	d = isPalindrome(d);
+	d =isMatch(s, p);
 
 	printf("%d \r\n",d);
 

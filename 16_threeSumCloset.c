@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define ABS(x) (x)>0?(x):(-(x))
+#define ABS(x) ((x)>0?(x):(-(x)))
 
 /*******************************************************************************
 Func Name   : QuickSort
@@ -26,7 +26,7 @@ History
 Date(yyyy-mm-dd)     Author        Modification
 2018-10-29           kongdepeng    Created
 *******************************************************************************/
-void QuickSort(int s[], int l, int r)
+static void QuickSort(int s[], int l, int r)
 {
     if(l < r)
     {
@@ -72,6 +72,7 @@ int threeSumClosest(int* nums, int numsSize, int target)
     int sum = 0, diff = 0;
     
     if(nums == NULL || numsSize < 3) return sum;
+    if(numsSize == 3) return (nums[0] + nums[1] + nums[2]);
 
     /* 先进行排序,方便后续处理 */
     QuickSort(nums, 0, numsSize - 1);
@@ -79,6 +80,8 @@ int threeSumClosest(int* nums, int numsSize, int target)
     sum = nums[0] + nums[1] + nums[2];
     
     diff = sum - target;
+
+    if(nums[0] == nums[numsSize - 1]) return sum;
 
     for(i = 0; i<numsSize; i++)
     {
@@ -90,23 +93,28 @@ int threeSumClosest(int* nums, int numsSize, int target)
         {
             if((nums[p1] + nums[p2]) < (target - nums[i]))
             {
+                if(ABS(nums[i] + nums[p1] + nums[p2] - target) < ABS(diff))
+                {
+                    sum = nums[i] + nums[p1] + nums[p2];
+
+                    diff = nums[i] + nums[p1] + nums[p2] - target;
+                }
                 p1++;
             }
             else if((nums[p1] + nums[p2]) > (target - nums[i]))
             {
+                if(ABS(nums[i] + nums[p1] + nums[p2] - target) < ABS(diff))
+                {
+                    sum = nums[i] + nums[p1] + nums[p2];
+
+                    diff = nums[i] + nums[p1] + nums[p2] - target;
+                }
                 p2--;
             }
             else if((nums[p1] + nums[p2]) == (0 - nums[i]))
             {
                 return 0;
             }
-            if(ABS(nums[i] + nums[p1] + nums[p2] - target) < ABS(diff))
-            {
-                sum = nums[i] + nums[p1] + nums[p2]; 
-
-                diff = nums[i] + nums[p1] + nums[p2] - target; 
-            }
-
         }
         /* 去重处理 */
         while(nums[i] == nums[i + 1] && i<numsSize){ i++; }
@@ -120,7 +128,7 @@ int nums2[] = { -7, -4, -6, 6, 4, -6, -9, -10, -7, 5, 3, -1, -5, 8, -1, -2, -8, 
 
 int nums3[] = {-1, 0, 1, 2, -1, -4};
 
-int nums4[] = {-1, 2, 1, 4};
+int nums4[] = { 1, 1, -1, -1, 3};
 
 int main(void)
 {

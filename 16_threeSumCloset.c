@@ -111,9 +111,9 @@ int threeSumClosest(int* nums, int numsSize, int target)
                 }
                 p2--;
             }
-            else if((nums[p1] + nums[p2]) == (0 - nums[i]))
+            else if((nums[p1] + nums[p2]) == (target - nums[i]))
             {
-                return 0;
+                return target;
             }
         }
         /* 去重处理 */

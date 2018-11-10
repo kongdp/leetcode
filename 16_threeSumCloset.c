@@ -130,7 +130,7 @@ int nums3[] = {-1, 0, 1, 2, -1, -4};
 
 int nums4[] = { 1, 1, -1, -1, 3};
 
-int main(void)
+int main_16(void)
 {
     int count = 0, i;
 

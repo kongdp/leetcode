@@ -1,113 +1,139 @@
-/*
- * ***************************************************************************
- * PROJECT     : leetcode
- * FILE NAME   : 17_letterCombinations.c
- * CREATE DATE : 2018-11-22
- * AUTHOR      : kevin
- * VERSION     : V1.0
- * DESCRIPISION: 
- * ---------------------------------------------------------------------------
- * Copyright SHANDONG CONTACT COMMUNICATION TECHNOLOGY L.T.D
- * ---------------------------------------------------------------------------
- * HISTORY:
- * Date        By     Comments
- * ----------  -----  --------------------------------------------------------
- * ***************************************************************************
- */
+//¸ø¶¨Ò»¸ö½ö°üº¬Êı×Ö 2-9 µÄ×Ö·û´®£¬·µ»ØËùÓĞËüÄÜ±íÊ¾µÄ×ÖÄ¸×éºÏ¡£
+//
+//¸ø³öÊı×Öµ½×ÖÄ¸µÄÓ³ÉäÈçÏÂ£¨Óëµç»°°´¼üÏàÍ¬£©¡£×¢Òâ 1 ²»¶ÔÓ¦ÈÎºÎ×ÖÄ¸¡£
+//
+//
+//
+//Ê¾Àı:
+//
+//ÊäÈë£º"23"
+//Êä³ö£º["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+//ËµÃ÷:
+//¾¡¹ÜÉÏÃæµÄ´ğ°¸ÊÇ°´×ÖµäĞòÅÅÁĞµÄ£¬µ«ÊÇÄã¿ÉÒÔÈÎÒâÑ¡Ôñ´ğ°¸Êä³öµÄË³Ğò¡£
 
-
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
+/* ¶¨Òå°´¼ü  */
+enum{
+    NUM_2 = 0,
+    NUM_3,
+    NUM_4,
+    NUM_5,
+    NUM_6,
+    NUM_7,
+    NUM_8,
+    NUM_9,
+    NUMS,
+};
 
-struct ListNode {
-    int val;
-    struct ListNode *next;
- };
+/* ¶¨Òå°´¼ü¶ÔÓ¦µÄ×ÖÄ¸ */
+const char tel[NUMS][4] = { "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+
+/* ¶¨ÒåÃ¿¸öÊı×Ö´ú±íµÄ×Ö·ûÊı */
+const int numStrs[NUMS] = { 3, 3, 3, 3, 3, 4, 3, 4 };
 
 /*******************************************************************************
-Func Name   : ListApend
-Description : æ·»åŠ åˆ°æœ«å°¾
-Input(s)    : head å¤´æŒ‡é’ˆ
-              data è¦æ·»åŠ çš„æ•°æ®
-Output(s)   : 
-Return      : 
-
+Func Name   : letterCombinations
+Description : ¸ù¾İÊäÈëµÄÊı×Ö,·µ»ØÏàÓ¦Êı×Ö¶ÔÓ¦µÄ°´¼ü×Ö·û´®
+Input(s)    : digits      Êı×Ö×Ö·û´®
+Output(s)   : returnSize  ×éºÏÖÖÊı
+Return      : Ö¸Ïò·µ»Ø×Ö·ûÊı×éµÄÖ¸Õë
 Others      :
 ------------------------------------------------------------------------------
 History
 Date(yyyy-mm-dd)     Author        Modification
-2018-11              kongdepeng    Created
+2018-10-29           kongdepeng    Created
 *******************************************************************************/
-void ListApend(struct ListNode *head, int data)
+char** letterCombinations(char* digits, int* returnSize)
 {
-    while(head->next != NULL)
+    int i, j, k;
+    int digitLen, *stringLen, *stringPos;
+    int returnStrNum = 1;
+    char **a = NULL;
+
+    if(NULL == digits) return NULL;
+
+    /* ÊäÈëÊı×Ö×Ö·û´®µÄ³¤¶È */
+    digitLen = strlen(digits);
+
+    if(digitLen == 0) return NULL;
+
+    /* ½øĞĞÊı×éºÏ·¨ĞÔ¼ì²é */
+    for(i = 0; i<digitLen; i++)
     {
-        head = head->next;        
+        if(digits[i] >'9' || digits[i] < '2') return NULL;
     }
 
-    head->next = (struct ListNode*)malloc(sizeof(struct ListNode));
+    /* Ã¿¸öÊı×Ö´ú±íµÄ×Ö·û´®³¤¶ÈºÍºóĞøÓÃÀ´¶ÁÈ¡µÄÃ¿¸öÊı×Ö´ú±í×Ö·û´®µÄµ±Ç°Î»ÖÃ */
+    stringLen = (int *)malloc(sizeof(int)*digitLen);
+    stringPos = (int *)malloc(sizeof(int)*digitLen);
 
-    if(head->next)
+    if(NULL == stringLen || NULL == stringPos) return NULL;
+
+    for(i = 0; i<digitLen; i++)
     {
-        head->next->val = data;
-        head->next->next = NULL;
+        stringLen[i] = numStrs[digits[i] - '2'];
+        stringPos[i] = 0;
+        returnStrNum *= stringLen[i];
     }
-}
 
-/*******************************************************************************
-Func Name   : PrintList
-Description : æ‰“å°é“¾è¡¨æ•°æ®
-Input(s)    : head å¤´æŒ‡é’ˆ
-Output(s)   : 
-Return      : 
-Others      :
-------------------------------------------------------------------------------
-History
-Date(yyyy-mm-dd)     Author        Modification
-2018-11              kongdepeng    Created
-*******************************************************************************/
-void PrintList(struct ListNode *head)
-{
-    while(head)
+    a = (char **)malloc(sizeof(char *)*returnStrNum);
+
+    if(NULL == a) return NULL;
+
+    for(i = 0; i<returnStrNum; i++)
     {
-        printf("%d->", head->val);
-        head = head->next;        
+        a[i] = (char *)calloc(digitLen + 1, sizeof(char));
+
+        if(NULL == a[i]) return NULL;
+
+        for(j = 0; j<digitLen; j++)
+        {
+            (a[i])[j] = tel[digits[j] - '2'][stringPos[j]];
+        }
+
+        /* ×îºóÒ»¸öÎ»ÖÃ+1 */
+        stringPos[digitLen - 1]++;
+
+        /* ²ÉÓÃ½øÎ»µÄ·½Ê½,ÍùÇ°Öğ¸ö²éÑ¯½øÎ» */
+        for(k = (digitLen - 1); k >= 0; k--)
+        {
+            if(stringPos[k] >= stringLen[k])
+            {
+                /* µ±Ç°Î»ÖÃÖÃÎª0 */
+                stringPos[k] = 0;
+                /* Ç°Î»ÖÃ1 */
+                if(k>=1)
+                { 
+                    stringPos[k - 1]++;
+                }
+            }
+        }
     }
-    printf("\r\n");
+
+    *returnSize = returnStrNum;
+
+    return a;
+
 }
 
-/*******************************************************************************
-Func Name   : removeNthFromEnd
-Description : ç§»é™¤å€’æ•°ç¬¬nä¸ªèŠ‚ç‚¹
-Input(s)    : head å¤´æŒ‡é’ˆ
-              n    å€’æ•°nä¸ª
-Output(s)   : 
-Return      : å¤´æŒ‡é’ˆ
-Others      :
-------------------------------------------------------------------------------
-History
-Date(yyyy-mm-dd)     Author        Modification
-2018-11              kongdepeng    Created
-*******************************************************************************/
-struct ListNode* removeNthFromEnd(struct ListNode* head, int n) 
-{
-    
-}
 
 int main()
 {
-    int i;
-    struct ListNode head;
-    head.next = NULL;
-    head.val = 1;
+    char str[] = "", **a;
+    int count, i;
 
-    for(i=2; i<6; i++)
+    a = letterCombinations(str, &count);
+
+    for(i = 0; i<count; i++)
     {
-        ListApend(&head, i);
+        printf("%s\r\n", a[i]);
     }
-    
-    PrintList(&head);
 
+    printf("just test\r\n");
+    while(1);
     return 0;
 }
+

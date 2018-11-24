@@ -69,10 +69,12 @@ Date(yyyy-mm-dd)     Author        Modification
 *******************************************************************************/
 void PrintList(struct ListNode *head)
 {
-    while(head)
+    struct ListNode *p = head->next;
+
+    while(p)
     {
-        printf("%d->", head->val);
-        head = head->next;        
+        printf("%d->", p->val);
+        p = p->next;        
     }
     printf("\r\n");
 }
@@ -92,22 +94,62 @@ Date(yyyy-mm-dd)     Author        Modification
 *******************************************************************************/
 struct ListNode* removeNthFromEnd(struct ListNode* head, int n) 
 {
-    
+    int count = 0;
+    struct ListNode *h, *t;
+
+    if(head == NULL || n == 0) return head;
+
+    h = head;
+    t = head;
+
+    while(t->next != NULL)
+    {
+        if(count < n)
+        {
+            count++;
+            t = t->next;
+        }
+        else
+        {
+            h = h->next;
+            t = t->next;
+        }
+    }
+
+    /* 循环完毕,进行删除 */
+    if(h->next == t)
+    {
+        free(h->next);
+        h->next = NULL;
+    }
+    else
+    {
+        free(h->next);
+        h->next = t;
+    }
+
+    return head;
 }
 
+struct ListNode g_head;
 int main()
 {
     int i;
-    struct ListNode head;
-    head.next = NULL;
-    head.val = 1;
+    
+    g_head.next = NULL;
+    g_head.val = 0;
 
-    for(i=2; i<6; i++)
+    for(i=1; i<6; i++)
     {
-        ListApend(&head, i);
+        ListApend(&g_head, i);
     }
     
-    PrintList(&head);
+    PrintList(&g_head);
 
+    removeNthFromEnd(&g_head, 2);
+
+    PrintList(&g_head);
+
+    while(1);
     return 0;
 }

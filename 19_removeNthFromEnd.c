@@ -139,7 +139,7 @@ int main()
     g_head.next = NULL;
     g_head.val = 0;
 
-    for(i=1; i<6; i++)
+    for(i=1; i<3; i++)
     {
         ListApend(&g_head, i);
     }

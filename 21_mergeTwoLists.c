@@ -62,7 +62,7 @@ struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2) {
         t->next = l1;
     }
 
-    if(l2 == NULL)
+    if(l2 != NULL)
     {
         t->next = l2;
     }

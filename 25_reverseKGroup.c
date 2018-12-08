@@ -147,13 +147,13 @@ Date(yyyy-mm-dd)     Author        Modification
 *******************************************************************************/
 struct ListNode* reverseKGroup(struct ListNode* head, int k)
 {
-    int i;
+    int i = 0;
     /*  lastEnd       curHead   k=3    p2 | nextHead */
     /*                 0         1      2 |   3      */
     struct ListNode *h, *t, *curHead, *lastEnd, *nextHead;
     if(head == NULL || head->next == NULL || k <= 1) return head;
 
-    curHead = nextHead = head;
+    h = curHead = nextHead = head;
     lastEnd = NULL;
     
     while(nextHead != NULL)
@@ -161,8 +161,9 @@ struct ListNode* reverseKGroup(struct ListNode* head, int k)
         nextHead = nextHead->next;
         i++;
 
-        if(i%k == 0)
+        if(i == k)
         {
+            i = 0;
             /* 记录反转后的新段头 */
             t = reverseKNode(curHead, k);
 
